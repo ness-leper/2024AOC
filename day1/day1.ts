@@ -41,7 +41,32 @@ async function DistanceSpread(left: string[], right: string[]) {
   return distance;
 }
 
+function SimilarityScore(left:string[], right:string[]){
+  const affinity:number[] = [];
+  for (let x = 0; x < left.length; x++){
+    const number = Number(left[x]);
+    let occurence = 0;
+    for (let idx = 0; idx < right.length; idx++){
+      const n = Number(right[idx]);
+      if (n > number)
+        break;
+      if (n === number){
+        occurence += 1;
+      }
+    }
+    affinity.push(number * occurence);
+  }
+  return affinity.reduce( (acc:number, val:number) => {
+    return acc + val;
+  },0);
+}
+
 (async () => {
   const { left, right } = CreateLists(await readLines("./input_a.txt"));
-  console.log(await DistanceSpread(left, right));
+  const partOne = (await DistanceSpread(left, right));
+
+  const partTwo = SimilarityScore(left, right);
+
+  console.log(partOne);
+  console.log(partTwo);
 })();
